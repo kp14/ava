@@ -10,7 +10,7 @@ import logging
 import os
 import subprocess
 import sys
-from collections import defaultdict, namedtuple
+from collections import defaultdict, namedtuple, OrderedDict
 
 logging.basicConfig(level=logging.INFO)
 
@@ -51,7 +51,8 @@ def generate_svg(alignments, index, path):
     with open(svg_file, 'w', encoding='utf8') as svg:
         total = 0
         svg.write('<svg xmlns:svg="http://www.w3.org/2000/svg" width="1000" height="1000">')
-        for yidx, seq in enumerate(index):
+        sequences_ordered = OrderedDict.fromkeys(index)
+        for yidx, seq in enumerate(sequences_ordered.keys()):
             for xidx, partner in enumerate(alignments[seq]):
                 x = str(X_INIT + (xidx * WIDTH) + GAP)
                 y = str(Y_INIT + (yidx * HEIGHT) + GAP)
@@ -117,8 +118,12 @@ def cleanup(path):
                 logging.error('Cannot clean target dir of output file: {}'.format(file))
 
 def _svg_rect(x, y, opa):
-    template = '<g><rect x="{x}" y="{y}" width="{w}" height="{h}" style="fill:rgb(0,0,255);fill-opacity:{opa}" /></g>'
-    return template.format(x=x, y=y, w=WIDTH, h=HEIGHT, opa=opa)
+    if opa == '1.0':
+        color = 'green'
+    else:
+        color = 'blue'
+    template = '<g><rect x="{x}" y="{y}" width="{w}" height="{h}" style="fill:{color};fill-opacity:{opa}" /></g>'
+    return template.format(x=x, y=y, w=WIDTH, h=HEIGHT, color=color, opa=opa)
 
 
 def run():
