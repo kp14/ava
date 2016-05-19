@@ -101,8 +101,6 @@ def parse_alignment_output(alignment_file, path):
                     seq2= None
                     identity = None
                     similarity = None
-
-
         logging.info('Length of alignment index: {}'.format(str(len(index))))
         logging.info('Counted alignments: {}'.format(str(counter)))
         return (alignments, index)
