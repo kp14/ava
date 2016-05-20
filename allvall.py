@@ -18,7 +18,6 @@ CMD = '{prog} {seq1} {seq2} stdout -gapopen 10.0 -gapextend 0.5 >> {prog}_alignm
 PROGS = ['water', 'needle']
 WIDTH = 10
 HEIGHT = WIDTH
-GAP = 6
 X_INIT = 95
 Y_INIT = 95
 
@@ -57,8 +56,8 @@ def generate_svg(alignments, index, path):
             index_dict[val] = idx
         for seq in index:
             for partner in alignments[seq]:
-                x = str(X_INIT + (index_dict[seq] * WIDTH) + GAP)
-                y = str(Y_INIT + (index_dict[partner.seq] * HEIGHT) + GAP)
+                x = str(X_INIT + (index_dict[seq] * WIDTH))
+                y = str(Y_INIT + (index_dict[partner.seq] * HEIGHT))
                 opa = partner.identity
                 title = '{0}-{1}'.format(seq, partner.seq)
                 svg.write(_svg_rect(x, y, opa, title))
@@ -132,7 +131,7 @@ def _svg_rect(x, y, opa, title):
         color = 'green'
     else:
         color = 'blue'
-    template = '<g><title>{title}</title><rect x="{x}" y="{y}" width="{w}" height="{h}" style="fill:{color};fill-opacity:{opa}" /></g>'
+    template = '<g><title>{title}</title><rect x="{x}" y="{y}" width="{w}" height="{h}" style="fill:{color};stroke:white;stroke-width:1;fill-opacity:{opa}" /></g>'
     return template.format(x=x, y=y, w=WIDTH, h=HEIGHT, color=color, opa=opa, title=title)
 
 
@@ -143,7 +142,7 @@ def _filename_no_ext(path):
 
 def run():
     path = sys.argv[1]
-    run_alignments(path)
+#    run_alignments(path)
     alignments, index = parse_alignment_output('needle_alignments.txt', path)
     generate_svg(alignments, index, path)
 
