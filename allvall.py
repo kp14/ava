@@ -151,7 +151,7 @@ def svg_rectangle(index_dict, seq, partner):
     x = str(X_INIT + (index_dict[seq] * WIDTH))
     y = str(Y_INIT + (index_dict[partner.seq] * HEIGHT))
     opa = partner.identity
-    title = '{0}-{1}'.format(seq, partner.seq)
+    title = '{0}-{1}: {2}'.format(seq, partner.seq, partner.identity)
     logging.debug('Generated <rect> at {x}, {y} with opacity {opa} and title {title}'.format(x=x, y=y, opa=opa, title=title))
     return _svg_rect(x, y, opa, title)
 
