@@ -55,13 +55,11 @@ def generate_svg(alignments, index, path):
         for idx, val in enumerate(index):
             index_dict[val] = idx
         for seq in index:
+            svg.write(svg_text_vertical(index_dict, seq))
+            svg.write(svg_text_horizontal(index_dict, seq))
+            svg.write(svg_guidelines(index_dict, seq))
             for partner in alignments[seq]:
-                x = str(X_INIT + (index_dict[seq] * WIDTH))
-                y = str(Y_INIT + (index_dict[partner.seq] * HEIGHT))
-                opa = partner.identity
-                title = '{0}-{1}'.format(seq, partner.seq)
-                svg.write(_svg_rect(x, y, opa, title))
-                logging.debug('Added <rect> at {x}, {y} with opacity {opa}'.format(x=x, y=y, opa=opa))
+                svg.write(svg_rectangle(index_dict, seq, partner))
                 total += 1
         logging.info('Number of <rect> written: {}'.format(str(total)))
         svg.write('</svg>')
@@ -124,6 +122,38 @@ def cleanup(path):
                 logging.info('Cleaned up existing output file: {}'.format(file))
             except:
                 logging.error('Cannot clean target dir of output file: {}'.format(file))
+
+
+def svg_text_vertical(index_dict, seq):
+    template = '<text x="{x}" y="{y}" font-size="10">{text}</text>'
+    x = str(5)
+    y = str(Y_INIT + index_dict[seq] * HEIGHT + HEIGHT)
+    return template.format(x=x, y=y, text=seq)
+
+
+def svg_text_horizontal(index_dict, seq):
+    template = '<text x="{x}" y="{y}" font-size="10" transform = "rotate(-90 {x} {y})">{text}</text>'
+    x = str(X_INIT + index_dict[seq] * WIDTH + WIDTH)
+    y = Y_INIT - 3
+    return template.format(x=x, y=y, text=seq)
+
+
+def svg_guidelines(index_dict, seq):
+    template = '<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" style="stroke:grey;stroke-width:2" />'
+    x1 = str(X_INIT + index_dict[seq] * WIDTH + WIDTH / 2)
+    y1 = Y_INIT
+    x2 = x1
+    y2 = Y_INIT + HEIGHT * index_dict[seq]
+    return template.format(x1=x1, y1=y1, x2=x2, y2=y2)
+
+
+def svg_rectangle(index_dict, seq, partner):
+    x = str(X_INIT + (index_dict[seq] * WIDTH))
+    y = str(Y_INIT + (index_dict[partner.seq] * HEIGHT))
+    opa = partner.identity
+    title = '{0}-{1}'.format(seq, partner.seq)
+    logging.debug('Generated <rect> at {x}, {y} with opacity {opa} and title {title}'.format(x=x, y=y, opa=opa, title=title))
+    return _svg_rect(x, y, opa, title)
 
 
 def _svg_rect(x, y, opa, title):
