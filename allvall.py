@@ -16,6 +16,7 @@ logging.basicConfig(level=logging.INFO)
 
 CMD = '{prog} {seq1} {seq2} stdout -gapopen 10.0 -gapextend 0.5 >> {prog}_alignments.txt'
 PROGS = ['water', 'needle']
+OUTPUT_FILE_BASE = '{prog}_alignments.txt'
 WIDTH = 10
 HEIGHT = WIDTH
 X_INIT = 95
@@ -46,8 +47,15 @@ def run_alignments(path):
     logging.info('Total number of alignments run: {}'.format(str(alignments_run)))
 
 
-def generate_svg(alignments, index, path):
-    svg_file = os.path.join(path, 'test.html')
+def visualize_alignments(path):
+    for prog in PROGS:
+        output_file = OUTPUT_FILE_BASE.format(prog=prog)
+        alignments, index = parse_alignment_output(output_file, path)
+        generate_svg(alignments, index, path, prog)
+
+
+def generate_svg(alignments, index, path, prog):
+    svg_file = os.path.join(path, '{}_alignments.html'.format(prog))
     with open(svg_file, 'w', encoding='utf8') as svg:
         total = 0
         svg.write('<svg xmlns:svg="http://www.w3.org/2000/svg" width="1000" height="1000">')
@@ -172,9 +180,8 @@ def _filename_no_ext(path):
 
 def run():
     path = sys.argv[1]
-#    run_alignments(path)
-    alignments, index = parse_alignment_output('needle_alignments.txt', path)
-    generate_svg(alignments, index, path)
+    run_alignments(path)
+    visualize_alignments(path)
 
 
 if __name__ == "__main__":
