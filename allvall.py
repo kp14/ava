@@ -14,7 +14,7 @@ from collections import defaultdict, namedtuple
 
 logging.basicConfig(level=logging.INFO)
 
-CMD = '{prog} {seq1} {seq2} stdout -gapopen 10.0 -gapextend 0.5 >> {prog}_alignments.txt'
+CMD = '{prog} {seq1} {seq2} stdout -gapopen 10.0 -gapextend 0.5 >> {output}'
 PROGS = ['water', 'needle']
 OUTPUT_FILE_BASE = '{prog}_alignments.txt'
 WIDTH = 10
@@ -38,9 +38,11 @@ def run_alignments(path):
         cnt[combi[0]] += 1
         for prog in PROGS:
             alignments_run += 1
+            output_file = OUTPUT_FILE_BASE.format(prog=prog)
             subprocess.call(CMD.format(prog=prog,
                                        seq1=combi[0],
-                                       seq2=combi[1]), shell=True)
+                                       seq2=combi[1],
+                                       output=output_file), shell=True)
     for fasta, count in cnt.items():
         logging.debug('Alignments run against {fasta}: {count}'.format(fasta=fasta, count=str(count)))
     logging.info('Total number of combinations run: {}'.format(str(combis_run)))
