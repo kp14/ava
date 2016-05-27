@@ -171,7 +171,7 @@ def _svg_rect(x, y, opa, title):
         color = 'green'
     else:
         color = 'blue'
-    template = '<g><title>{title}</title><rect x="{x}" y="{y}" width="{w}" height="{h}" style="fill:{color};stroke:white;stroke-width:1;fill-opacity:{opa}" /></g>'
+    template = '<g><title>{title}</title><rect x="{x}" y="{y}" width="{w}" height="{h}" style="fill:{color};stroke:grey;stroke-width:1;fill-opacity:{opa}" /></g>'
     return template.format(x=x, y=y, w=WIDTH, h=HEIGHT, color=color, opa=opa, title=title)
 
 
