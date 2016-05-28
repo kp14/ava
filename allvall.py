@@ -39,10 +39,10 @@ def run_alignments(path):
         for prog in PROGS:
             alignments_run += 1
             output_file = OUTPUT_FILE_BASE.format(prog=prog)
-            subprocess.call(CMD.format(prog=prog,
+            subprocess.run(CMD.format(prog=prog,
                                        seq1=combi[0],
                                        seq2=combi[1],
-                                       output=output_file), shell=True)
+                                       output=output_file), shell=True, cwd=path)
     for fasta, count in cnt.items():
         logging.debug('Alignments run against {fasta}: {count}'.format(fasta=fasta, count=str(count)))
     logging.info('Total number of combinations run: {}'.format(str(combis_run)))
