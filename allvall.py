@@ -19,8 +19,8 @@ PROGS = ['water', 'needle']
 OUTPUT_FILE_BASE = '{prog}_alignments.txt'
 WIDTH = 10
 HEIGHT = WIDTH
-X_INIT = 95
-Y_INIT = 95
+X_INIT = 120
+Y_INIT = 120
 
 Partner = namedtuple('Partner', ['seq', 'identity', 'similarity'])
 
@@ -135,8 +135,8 @@ def cleanup(path):
 
 
 def svg_text_vertical(index_dict, seq):
-    template = '<text x="{x}" y="{y}" font-size="10">{text}</text>'
-    x = str(5)
+    template = '<text text-anchor="end" x="{x}" y="{y}" font-size="10">{text}</text>'
+    x = str(X_INIT - 5)
     y = str(Y_INIT + index_dict[seq] * HEIGHT + HEIGHT)
     return template.format(x=x, y=y, text=seq)
 
