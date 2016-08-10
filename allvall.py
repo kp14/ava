@@ -14,7 +14,7 @@ from collections import defaultdict, namedtuple
 
 logging.basicConfig(level=logging.INFO)
 
-CMD = '{prog} {seq1} {seq2} stdout -gapopen 10.0 -gapextend 0.5 >> {output}'
+CMD = '{prog} {seq1} {seq2} stdout -gapopen 10.0 -gapextend 0.5 -sprotein1 -sprotein2 >> {output}'
 PROGS = ['water', 'needle']
 OUTPUT_FILE_BASE = '{prog}_alignments.txt'
 WIDTH = 10
